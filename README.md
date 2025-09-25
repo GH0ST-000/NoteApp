@@ -33,7 +33,7 @@ A modern, feature-rich Laravel application for creating, organizing, and sharing
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/
+git clone https://github.com/GH0ST-000/NoteApp
 cd notes-app
 ```
 
