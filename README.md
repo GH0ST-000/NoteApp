@@ -49,7 +49,7 @@ composer install
 Install and compile frontend assets:
 ```bash
 npm install
-npm run dev
+npm run build
 ```
 
 ### Step 3: Configure Environment
