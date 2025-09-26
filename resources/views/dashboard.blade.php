@@ -14,7 +14,7 @@
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold">{{ __('My Notes') }}</h3>
                             <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                                {{ Auth::user()->notes->count() }} {{ __('total') }}
+                                {{ $notesCount }} {{ __('total') }}
                             </span>
                         </div>
                         <p class="text-gray-600 mb-4">{{ __('Manage your personal notes, organize them into groups, and share them with others.') }}</p>
@@ -35,7 +35,7 @@
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold">{{ __('My Groups') }}</h3>
                             <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                                {{ Auth::user()->groups->count() }} {{ __('total') }}
+                                {{ $groupsCount }} {{ __('total') }}
                             </span>
                         </div>
                         <p class="text-gray-600 mb-4">{{ __('Organize your notes into groups for better management and sharing.') }}</p>
@@ -56,11 +56,11 @@
                 <div class="p-6">
                     <h3 class="text-lg font-semibold mb-4">{{ __('Recent Notes') }}</h3>
 
-                    @if (Auth::user()->notes->isEmpty())
+                    @if ($recentNotes->isEmpty())
                         <p class="text-gray-600">{{ __('You have no notes yet.') }}</p>
                     @else
                         <div class="space-y-4">
-                            @foreach (Auth::user()->notes()->latest()->take(5)->get() as $note)
+                            @foreach ($recentNotes as $note)
                                 <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
                                     <div class="flex justify-between items-start">
                                         <div>

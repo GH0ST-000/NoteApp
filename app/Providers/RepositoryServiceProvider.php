@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Group;
 use App\Models\Note;
+use App\Repositories\DashboardRepository;
+use App\Repositories\DashboardRepositoryInterface;
 use App\Repositories\GroupRepository;
 use App\Repositories\GroupRepositoryInterface;
 use App\Repositories\NoteRepository;
@@ -23,6 +25,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(GroupRepositoryInterface::class, function ($app) {
             return new GroupRepository(new Group);
+        });
+
+        $this->app->bind(DashboardRepositoryInterface::class, function ($app) {
+            return new DashboardRepository;
         });
     }
 
