@@ -20,11 +20,8 @@
             <div class="p-3 border-b border-gray-200">
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
                     </div>
-                    <input type="text" placeholder="Search notes..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500">
+                    <input type="text" placeholder="Search notes..." class="block w-full ps-4 pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500">
                 </div>
             </div>
 
@@ -124,15 +121,19 @@
 
             <!-- Note Footer -->
             <div class="border-t border-gray-200 p-4 flex justify-between items-center">
-                <form method="POST" action="{{ route('notes.destroy', $note) }}" onsubmit="return confirm('{{ __('Are you sure you want to delete this note?') }}');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-red-500 hover:text-red-700">
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </form>
+                <button type="button" class="text-red-500 hover:text-red-700 modal-trigger" data-modal-id="delete-note-modal">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+                
+                <!-- Delete Confirmation Modal -->
+                <x-delete-confirmation-modal 
+                    id="delete-note-modal"
+                    title="{{ __('Delete Note') }}"
+                    message="{{ __('Are you sure you want to delete this note? This action cannot be undone.') }}"
+                    formAction="{{ route('notes.destroy', $note) }}"
+                />
 
                 <div class="flex items-center space-x-4">
                     @if ($note->group)
@@ -146,7 +147,7 @@
                         </a>
                     @endif
 
-                    <a href="{{ route('notes.edit', $note) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    <a href="{{ route('notes.edit', $note) }}" class="inline-flex items-center ms-3 px-3 py-1.5 bg-gray-100 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                         {{ __('Edit Note') }}
                     </a>
                 </div>

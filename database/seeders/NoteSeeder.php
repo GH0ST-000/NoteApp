@@ -15,8 +15,8 @@ class NoteSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get all users
-        $users = User::all();
+        // Get all users with their groups preloaded
+        $users = User::with('groups')->get();
 
         // Create 3-5 notes for each user
         foreach ($users as $user) {
@@ -45,7 +45,7 @@ class NoteSeeder extends Seeder
                     'is_pinned' => $isPinned,
                     'is_published' => $isPublished,
                     'slug' => $isPublished ? Str::slug($title).'-'.Str::random(8) : null,
-                    'image_path' => $hasImage ? 'notes/'.fake()->uuid().'.jpg' : null,
+                    'image_path' => $hasImage ? 'notes/placeholder-'.rand(1, 5).'.jpg' : null,
                 ]);
             }
         }

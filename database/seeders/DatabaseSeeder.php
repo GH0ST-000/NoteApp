@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         // Call seeders in the correct order
         $this->call([
-            UserSeeder::class,  // First create users
+            ImageSeeder::class, // First download placeholder images
+            UserSeeder::class,  // Then create users
             GroupSeeder::class, // Then create groups for users
             NoteSeeder::class,  // Finally create notes (some assigned to groups)
         ]);

@@ -207,6 +207,15 @@ The application follows a clean architecture with:
 - **Models**: Represent database entities
 - **Views**: Blade templates for the UI
 
+
+### Tools And Package
+- **Rector php**: source `https://github.com/rectorphp/rector`
+- **Pint**:       source `https://github.com/laravel/pint`
+- **Debug bar**:  source `https://github.com/barryvdh/laravel-debugbar`
+- **Alpine js**:  source `https://alpinejs.dev/start-here`
+
+
+
 ### Troubleshooting
 
 #### Common Issues
