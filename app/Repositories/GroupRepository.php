@@ -20,7 +20,19 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      */
     public function getForUser(int $userId): Collection
     {
-        return $this->model->where('user_id', $userId)
+        return $this->model->with('notes')
+            ->where('user_id', $userId)
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
+     * Get groups for a specific user with notes count.
+     */
+    public function getForUserWithNotesCount(int $userId): Collection
+    {
+        return $this->model->withCount('notes')
+            ->where('user_id', $userId)
             ->orderBy('name')
             ->get();
     }
@@ -30,9 +42,18 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      */
     public function findPublishedBySlug(string $slug): ?Group
     {
-        return $this->model->where('slug', $slug)
+        return $this->model->with('notes')
+            ->where('slug', $slug)
             ->where('is_published', true)
             ->first();
+    }
+
+    /**
+     * Find a group by ID with eager loaded notes.
+     */
+    public function findWithNotes(int $id): Group
+    {
+        return $this->model->with('notes')->findOrFail($id);
     }
 
     /**

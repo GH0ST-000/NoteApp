@@ -131,6 +131,15 @@ After seeding the database, you can log in with the following credentials:
 #### Authentication
 
 The API uses Laravel Sanctum for authentication. To use protected endpoints:
+1. Use laravel tinker
+```bash
+php artisan tinker
+$user = App\Models\User::first();
+$token = $user->createToken('test-token')->plainTextToken
+```
+Copy and paste this token to bearer token in postman or insomnia
+
+---- OR ------
 
 1. Log in through the web interface
 2. Use the same session cookie for API requests

@@ -37,7 +37,7 @@
                 @endif
 
                 <ul class="divide-y divide-gray-200">
-                    @foreach (Auth::user()->notes()->orderBy('is_pinned', 'desc')->orderBy('updated_at', 'desc')->get() as $noteItem)
+                    @foreach (Auth::user()->notes()->with('group')->orderBy('is_pinned', 'desc')->orderBy('updated_at', 'desc')->get() as $noteItem)
                         <li>
                             <a href="{{ route('notes.show', $noteItem) }}" class="block hover:bg-gray-50">
                                 <div class="px-4 py-3">

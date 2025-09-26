@@ -75,7 +75,7 @@
 
                                         <div class="flex justify-between items-center mt-4">
                                             <span class="text-sm text-gray-500">{{ $note->updated_at->diffForHumans() }}</span>
-                                            <a href="{{ route('notes.published', $note->slug) }}" class="inline-flex items-center px-3 py-1 bg-gray-200 border border-transparent rounded-md font-medium text-xs text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                            <a href="{{ route('notes.published', ['slug' => $note->slug]) }}" class="inline-flex items-center px-3 py-1 bg-gray-200 border border-transparent rounded-md font-medium text-xs text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                                 {{ __('View Full Note') }}
                                             </a>
                                         </div>
