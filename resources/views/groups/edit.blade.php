@@ -38,20 +38,29 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between mt-4">
-                            <form method="POST" action="{{ route('groups.destroy', $group) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this group? Notes in this group will remain but will be unassigned.');">
-                                @csrf
-                                @method('DELETE')
-                                <x-danger-button>
-                                    {{ __('Delete Group') }}
-                                </x-danger-button>
-                            </form>
-
+                        <div class="flex items-center justify-end mt-4">
                             <x-primary-button>
                                 {{ __('Update Group') }}
                             </x-primary-button>
                         </div>
                     </form>
+
+                    <!-- Separate delete form -->
+                    <form method="POST" action="{{ route('groups.destroy', $group) }}" class="mt-4" id="delete-group-form">
+                        @csrf
+                        @method('DELETE')
+                        <x-danger-button type="button" class="modal-trigger" data-modal-id="delete-group-modal">
+                            {{ __('Delete Group') }}
+                        </x-danger-button>
+                    </form>
+
+                    <!-- Delete Confirmation Modal -->
+                    <x-delete-confirmation-modal
+                        id="delete-group-modal"
+                        title="{{ __('Delete Group') }}"
+                        message="{{ __('Are you sure you want to delete this group? Notes in this group will remain but will be unassigned.') }}"
+                        formAction="{{ route('groups.destroy', $group) }}"
+                    />
                 </div>
             </div>
         </div>
