@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Repositories\GroupRepositoryInterface;
+use App\Repositories\NoteRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -10,14 +12,33 @@ use Illuminate\Support\Str;
 class GroupController extends Controller
 {
     /**
+     * @var GroupRepositoryInterface
+     */
+    protected $groupRepository;
+
+    /**
+     * @var NoteRepositoryInterface
+     */
+    protected $noteRepository;
+
+    /**
+     * GroupController constructor.
+     */
+    public function __construct(
+        GroupRepositoryInterface $groupRepository,
+        NoteRepositoryInterface $noteRepository
+    ) {
+        $this->groupRepository = $groupRepository;
+        $this->noteRepository = $noteRepository;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // Get the authenticated user's groups
-        $groups = Auth::user()->groups()
-            ->orderBy('name')
-            ->get();
+        // Get the authenticated user's groups with notes count
+        $groups = $this->groupRepository->getForUserWithNotesCount(Auth::id());
 
         return view('groups.index', compact('groups'));
     }
@@ -47,7 +68,7 @@ class GroupController extends Controller
         }
 
         // Create the group
-        $group = Auth::user()->groups()->create([
+        $this->groupRepository->createForUser(Auth::id(), [
             'name' => $request->input('name'),
             'is_published' => $request->input('is_published', false),
             'slug' => $slug,
@@ -63,15 +84,15 @@ class GroupController extends Controller
     public function show(Group $group)
     {
         // Check if the group belongs to the authenticated user
-        if ($group->user_id !== Auth::id()) {
+        if (! $this->groupRepository->belongsToUser($group->id, Auth::id())) {
             abort(403, 'Unauthorized action.');
         }
 
+        // Get the group with eager loaded notes
+        $group = $this->groupRepository->findWithNotes($group->id);
+
         // Get the notes in this group
-        $notes = $group->notes()
-            ->orderBy('is_pinned', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $notes = $group->notes->sortByDesc('is_pinned')->sortByDesc('updated_at');
 
         return view('groups.show', compact('group', 'notes'));
     }
@@ -82,7 +103,7 @@ class GroupController extends Controller
     public function edit(Group $group)
     {
         // Check if the group belongs to the authenticated user
-        if ($group->user_id !== Auth::id()) {
+        if (! $this->groupRepository->belongsToUser($group->id, Auth::id())) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -95,7 +116,7 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         // Check if the group belongs to the authenticated user
-        if ($group->user_id !== Auth::id()) {
+        if (! $this->groupRepository->belongsToUser($group->id, Auth::id())) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -104,20 +125,22 @@ class GroupController extends Controller
             'is_published' => 'boolean',
         ]);
 
+        $attributes = [
+            'name' => $request->input('name'),
+            'is_published' => $request->input('is_published', false),
+        ];
+
         // Update slug if publishing status changed
         if ($request->input('is_published', false) && ! $group->is_published) {
             // Group is being published
-            $group->slug = Str::slug($request->input('name')).'-'.Str::random(8);
+            $attributes['slug'] = Str::slug($request->input('name')).'-'.Str::random(8);
         } elseif (! $request->input('is_published', false) && $group->is_published) {
             // Group is being unpublished
-            $group->slug = null;
+            $attributes['slug'] = null;
         }
 
         // Update the group
-        $group->update([
-            'name' => $request->input('name'),
-            'is_published' => $request->input('is_published', false),
-        ]);
+        $this->groupRepository->update($group->id, $attributes);
 
         return redirect()->route('groups.index')
             ->with('success', 'Group updated successfully.');
@@ -129,12 +152,12 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         // Check if the group belongs to the authenticated user
-        if ($group->user_id !== Auth::id()) {
+        if (! $this->groupRepository->belongsToUser($group->id, Auth::id())) {
             abort(403, 'Unauthorized action.');
         }
 
         // Delete the group (notes will remain but will be unassigned from this group)
-        $group->delete();
+        $this->groupRepository->delete($group->id);
 
         return redirect()->route('groups.index')
             ->with('success', 'Group deleted successfully.');
@@ -145,17 +168,15 @@ class GroupController extends Controller
      */
     public function showPublished(string $slug)
     {
-        // Find the published group by slug
-        $group = Group::where('slug', $slug)
-            ->where('is_published', true)
-            ->firstOrFail();
+        // Find the published group by slug with eager loaded notes
+        $group = $this->groupRepository->findPublishedBySlug($slug);
+
+        if (! $group) {
+            abort(404, 'Published group not found.');
+        }
 
         // Get the published notes in this group
-        $notes = $group->notes()
-            ->where('is_published', true)
-            ->orderBy('is_pinned', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $notes = $group->notes->where('is_published', true)->sortByDesc('is_pinned')->sortByDesc('updated_at');
 
         return view('groups.published', compact('group', 'notes'));
     }

@@ -76,7 +76,8 @@ class NoteRepository extends BaseRepository implements NoteRepositoryInterface
      */
     public function getPublishedForGroup(int $groupId): Collection
     {
-        return $this->model->where('group_id', $groupId)
+        return $this->model->with('group')
+            ->where('group_id', $groupId)
             ->where('is_published', true)
             ->orderBy('is_pinned', 'desc')
             ->orderBy('updated_at', 'desc')

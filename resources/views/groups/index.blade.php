@@ -44,7 +44,7 @@
                                 </div>
 
                                 <p class="text-gray-600 mb-4">
-                                    {{ $group->notes->count() }} {{ __('notes') }}
+                                    {{ $group->notes_count ?? 0 }} {{ __('notes') }}
                                 </p>
 
                                 <div class="flex justify-between items-center mt-4">
