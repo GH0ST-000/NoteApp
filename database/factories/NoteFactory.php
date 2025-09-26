@@ -31,7 +31,7 @@ class NoteFactory extends Factory
             'is_pinned' => $isPinned,
             'is_published' => $isPublished,
             'slug' => $isPublished ? Str::slug($title).'-'.Str::random(8) : null,
-            'image_path' => fake()->boolean(40) ? 'notes/'.fake()->uuid().'.jpg' : null, // 40% chance of having an image
+            'image_path' => fake()->boolean(40) ? 'notes/'.fake()->randomElement(['2BTQ4KVvc43UtxUwI1Y44S79jB9OkRGrg8X9ll06.jpg', '5ojdnA7r2qD6yZvIlNWeqHX8JbwkeLTJw175EwCi.png', 'HOibMSI9JO1ZtmfycgH2jRPCUlG56hPzC79rooH8.jpg']) : null, // 40% chance of having an image
         ];
     }
 }
