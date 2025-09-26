@@ -28,13 +28,13 @@ class DownloadPlaceholderImages extends Command
     public function handle()
     {
         $this->info('Downloading placeholder images...');
-        
+
         // Create notes directory if it doesn't exist
         $directory = storage_path('app/public/notes');
-        if (!File::exists($directory)) {
+        if (! File::exists($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
-        
+
         // List of placeholder image URLs
         $placeholders = [
             'https://picsum.photos/800/600?random=1' => 'notes/placeholder-1.jpg',
@@ -43,11 +43,11 @@ class DownloadPlaceholderImages extends Command
             'https://picsum.photos/800/600?random=4' => 'notes/placeholder-4.jpg',
             'https://picsum.photos/800/600?random=5' => 'notes/placeholder-5.jpg',
         ];
-        
+
         foreach ($placeholders as $url => $path) {
             $this->info("Downloading: $url");
             $contents = file_get_contents($url);
-            
+
             if ($contents) {
                 Storage::disk('public')->put($path, $contents);
                 $this->info("Saved to: $path");
@@ -55,7 +55,7 @@ class DownloadPlaceholderImages extends Command
                 $this->error("Failed to download: $url");
             }
         }
-        
+
         $this->info('Placeholder images downloaded successfully!');
     }
 }
