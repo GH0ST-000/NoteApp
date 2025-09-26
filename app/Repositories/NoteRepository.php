@@ -20,7 +20,8 @@ class NoteRepository extends BaseRepository implements NoteRepositoryInterface
      */
     public function getForUser(int $userId, ?bool $isPinned = null): Collection
     {
-        $query = $this->model->where('user_id', $userId)
+        $query = $this->model->with('group')
+            ->where('user_id', $userId)
             ->orderBy('is_pinned', 'desc')
             ->orderBy('updated_at', 'desc');
 
@@ -36,9 +37,18 @@ class NoteRepository extends BaseRepository implements NoteRepositoryInterface
      */
     public function findPublishedBySlug(string $slug): ?Note
     {
-        return $this->model->where('slug', $slug)
+        return $this->model->with('group')
+            ->where('slug', $slug)
             ->where('is_published', true)
             ->first();
+    }
+
+    /**
+     * Find a note by ID with group relationship.
+     */
+    public function findWithGroup(int $id): Note
+    {
+        return $this->model->with('group')->findOrFail($id);
     }
 
     /**

@@ -18,6 +18,11 @@ interface NoteRepositoryInterface extends RepositoryInterface
     public function findPublishedBySlug(string $slug): ?Note;
 
     /**
+     * Find a note by ID with group relationship.
+     */
+    public function findWithGroup(int $id): Note;
+
+    /**
      * Create a note for a specific user.
      */
     public function createForUser(int $userId, array $attributes): Note;

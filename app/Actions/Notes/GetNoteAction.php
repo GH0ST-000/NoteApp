@@ -33,7 +33,7 @@ class GetNoteAction
             throw new AuthorizationException('Unauthorized action.');
         }
 
-        // Get the note
-        return $this->noteRepository->find($noteId);
+        // Get the note with group relationship eager loaded
+        return $this->noteRepository->findWithGroup($noteId);
     }
 }
