@@ -12,14 +12,16 @@ A modern, feature-rich Laravel application for creating, organizing, and sharing
 - **Image Support**: Upload and attach images to your notes
 - **API Access**: Full-featured API for programmatic access to notes
 - **Public Access**: Share your published notes with anyone via unique URLs
+- **Custom UI Components**: Modern custom confirmation modals for better user experience
 
 ## Technology Stack
 
 - **Backend**: Laravel 12.x
-- **Frontend**: Blade templates, TailwindCSS
+- **Frontend**: Blade templates, TailwindCSS, Alpine.js
 - **Database**: SQLite (default), MySQL, PostgreSQL (supported)
 - **Authentication**: Laravel Breeze
 - **Architecture**: Repository pattern, Action classes, DTOs
+- **UI Components**: Custom modals
 
 ## Requirements
 
@@ -34,7 +36,7 @@ A modern, feature-rich Laravel application for creating, organizing, and sharing
 
 ```bash
 git clone https://github.com/GH0ST-000/NoteApp
-cd notes-app
+cd NoteApp
 ```
 
 ### Step 2: Install Dependencies
@@ -208,11 +210,12 @@ The application follows a clean architecture with:
 - **Views**: Blade templates for the UI
 
 
-### Tools And Package
-- **Rector php**: source `https://github.com/rectorphp/rector`
-- **Pint**:       source `https://github.com/laravel/pint`
-- **Debug bar**:  source `https://github.com/barryvdh/laravel-debugbar`
-- **Alpine js**:  source `https://alpinejs.dev/start-here`
+### Tools And Packages
+- **Rector PHP**: Code quality tool - [GitHub](https://github.com/rectorphp/rector)
+- **Laravel Pint**: PHP code style fixer - [GitHub](https://github.com/laravel/pint)
+- **Laravel Debugbar**: Debug toolbar - [GitHub](https://github.com/barryvdh/laravel-debugbar)
+- **Alpine.js**: Lightweight JavaScript framework - [Website](https://alpinejs.dev/start-here)
+- **Custom Modal Component**: JavaScript-based custom confirmation dialogs
 
 
 
@@ -228,4 +231,3 @@ The application follows a clean architecture with:
 
 3. **Frontend Assets**:
    If the UI looks unstyled, make sure you've run `npm install` and `npm run dev`.
-# NoteApp
